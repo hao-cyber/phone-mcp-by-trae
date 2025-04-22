@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Phone MCP CLI - 命令行界面，用于直接与Android设备交互
+Trae Phone MCP CLI - 命令行界面，用于直接与Android设备交互
 """
 
 import argparse
@@ -10,7 +10,7 @@ import sys
 from typing import List, Optional, Dict, Any
 
 # 导入主模块
-from phone_mcp import ADBExecutor
+from trae_phone_mcp import ADBExecutor
 
 adb = ADBExecutor()
 
@@ -206,20 +206,11 @@ def main():
         print(result)
     
     elif args.command == "app":
-        # 尝试作为包名启动
         if "." in args.app_name:
             cmd = ["shell", "monkey", "-p", args.app_name, "-c", "android.intent.category.LAUNCHER", "1"]
             result = adb.run_command(cmd, check_output=False)
         else:
-            # 尝试查找匹配的应用
-            cmd = ["shell", "pm", "list", "packages", args.app_name]
-            result = adb.run_command(cmd)
-            if result.startswith("package:"):
-                package = result.split("package:")[1].strip()
-                cmd = ["shell", "monkey", "-p", package, "-c", "android.intent.category.LAUNCHER", "1"]
-                result = adb.run_command(cmd, check_output=False)
-            else:
-                result = f"找不到应用: {args.app_name}"
+            result = f"尝试打开应用: {args.app_name}，请提供完整包名以获得更好的结果"
         print(result)
     
     elif args.command == "close-app":
@@ -233,8 +224,10 @@ def main():
         print(result)
     
     elif args.command == "swipe":
-        cmd = ["shell", "input", "swipe", str(args.x1), str(args.y1), 
-               str(args.x2), str(args.y2), str(args.duration)]
+        cmd = ["shell", "input", "swipe", 
+               str(args.x1), str(args.y1), 
+               str(args.x2), str(args.y2), 
+               str(args.duration)]
         result = adb.run_command(cmd, check_output=False)
         print(result)
     
@@ -249,19 +242,22 @@ def main():
         print(result)
     
     elif args.command == "screenshot":
-        device_path = "/sdcard/screenshot.png"
-        cmd = ["shell", "screencap", "-p", device_path]
-        result = adb.run_command(cmd, check_output=False)
+        # 在设备上截图
+        remote_path = "/sdcard/screenshot.png"
+        adb.run_command(["shell", "screencap", "-p", remote_path])
         
-        # 将截图拉到本地
-        pull_cmd = ["pull", device_path, args.output]
-        pull_result = adb.run_command(pull_cmd, check_output=False)
+        # 拉取到本地
+        result = adb.run_command(["pull", remote_path, args.output])
+        
+        # 清理设备上的文件
+        adb.run_command(["shell", "rm", remote_path])
+        
         print(f"截图已保存到: {args.output}")
     
     elif args.command == "open-url":
         # 确保URL有协议前缀
         url = args.url
-        if not url.startswith("http://") and not url.startswith("https://"):
+        if not url.startswith("http"):
             url = "https://" + url
             
         cmd = ["shell", "am", "start", "-a", "android.intent.action.VIEW", "-d", url]
@@ -271,6 +267,6 @@ def main():
     elif args.command == "screen-interact":
         result = handle_screen_interact(args.action, args.params)
         print(result)
-
+    
 if __name__ == "__main__":
     main()

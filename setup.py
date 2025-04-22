@@ -7,7 +7,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
-    name="phone-mcp",
+    name="trae-phone-mcp",
     version="0.1.0",
     author="Hao",
     author_email="example@example.com",
@@ -16,7 +16,6 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/hao-cyber/phone-mcp",
     packages=find_packages(),
-    py_modules=["phone_mcp"],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
@@ -28,8 +27,8 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "phone-mcp=phone_mcp:main",
-            "phone-cli=phone_mcp:cli_main",
+            "trae-phone-mcp=trae_phone_mcp:main",
+            "trae-phone-cli=trae_phone_mcp:cli_main",
         ],
     },
 )

@@ -8,7 +8,7 @@ Phone MCP 基本使用示例
 """
 
 import time
-from phone_mcp import ADBExecutor
+from trae_phone_mcp import ADBExecutor
 
 def main():
     # 创建ADB执行器

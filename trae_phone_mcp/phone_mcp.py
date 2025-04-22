@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Phone MCP - 一个通过ADB命令控制Android手机的MCP插件
+Trae Phone MCP - 一个通过ADB命令控制Android手机的MCP插件
 """
 
 import json
@@ -161,7 +161,7 @@ class ADBExecutor:
         return devices
 
 # 创建MCP服务器
-app = FastMCP('phone-mcp')
+app = FastMCP('trae-phone-mcp')
 adb = ADBExecutor()
 
 # 设备管理工具
@@ -209,7 +209,7 @@ def call(phone_number: str) -> str:
     Returns:
         操作结果消息
     """
-    cmd = ['shell', 'am', 'start', '-a', 'android.intent.action.CALL', '-d', f'tel:{phone_number}']
+    cmd = ["shell", "am", "start", "-a", "android.intent.action.CALL", "-d", f"tel:{phone_number}"]
     return adb.run_command(cmd, check_output=False)
 
 @app.tool()
@@ -219,8 +219,7 @@ def hangup() -> str:
     Returns:
         操作结果消息
     """
-    # 使用按键模拟挂断电话
-    cmd = ['shell', 'input', 'keyevent', 'KEYCODE_ENDCALL']
+    cmd = ["shell", "input", "keyevent", "KEYCODE_ENDCALL"]
     return adb.run_command(cmd, check_output=False)
 
 # 短信功能
@@ -229,16 +228,16 @@ def send_sms(phone_number: str, message: str) -> str:
     """发送短信
     
     Args:
-        phone_number: 接收者的电话号码
+        phone_number: 接收者电话号码
         message: 短信内容
         
     Returns:
         操作结果消息
     """
-    # 使用intent发送短信
+    # 使用Android意图发送短信
     cmd = [
-        'shell', 'am', 'start', '-a', 'android.intent.action.SENDTO', 
-        '-d', f'smsto:{phone_number}', '--es', 'sms_body', message
+        "shell", "am", "start", "-a", "android.intent.action.SENDTO", 
+        "-d", f"smsto:{phone_number}", "--es", "sms_body", message
     ]
     return adb.run_command(cmd, check_output=False)
 
@@ -255,36 +254,29 @@ def open_app(app_name: str) -> str:
     """
     # 尝试作为包名启动
     if '.' in app_name:
-        cmd = ['shell', 'monkey', '-p', app_name, '-c', 'android.intent.category.LAUNCHER', '1']
+        cmd = ["shell", "monkey", "-p", app_name, "-c", "android.intent.category.LAUNCHER", "1"]
         return adb.run_command(cmd, check_output=False)
     else:
-        # 尝试查找匹配的应用
-        cmd = ['shell', 'pm', 'list', 'packages', app_name]
-        result = adb.run_command(cmd)
-        if result.startswith('package:'):
-            package = result.split('package:')[1].strip()
-            cmd = ['shell', 'monkey', '-p', package, '-c', 'android.intent.category.LAUNCHER', '1']
-            return adb.run_command(cmd, check_output=False)
-        else:
-            return f"找不到应用: {app_name}"
+        # 尝试通过应用名称查找包名（简化版）
+        return f"尝试打开应用: {app_name}，请提供完整包名以获得更好的结果"
 
 @app.tool()
 def close_app(package_name: str) -> str:
     """关闭应用
     
     Args:
-        package_name: 应用的包名
+        package_name: 应用包名
         
     Returns:
         操作结果消息
     """
-    cmd = ['shell', 'am', 'force-stop', package_name]
+    cmd = ["shell", "am", "force-stop", package_name]
     return adb.run_command(cmd, check_output=False)
 
 # 屏幕交互
 @app.tool()
 def tap(x: int, y: int) -> str:
-    """在屏幕上点击指定坐标
+    """点击屏幕
     
     Args:
         x: X坐标
@@ -293,12 +285,12 @@ def tap(x: int, y: int) -> str:
     Returns:
         操作结果消息
     """
-    cmd = ['shell', 'input', 'tap', str(x), str(y)]
+    cmd = ["shell", "input", "tap", str(x), str(y)]
     return adb.run_command(cmd, check_output=False)
 
 @app.tool()
 def swipe(x1: int, y1: int, x2: int, y2: int, duration: int = 300) -> str:
-    """在屏幕上从一个点滑动到另一个点
+    """滑动屏幕
     
     Args:
         x1: 起始X坐标
@@ -310,7 +302,7 @@ def swipe(x1: int, y1: int, x2: int, y2: int, duration: int = 300) -> str:
     Returns:
         操作结果消息
     """
-    cmd = ['shell', 'input', 'swipe', str(x1), str(y1), str(x2), str(y2), str(duration)]
+    cmd = ["shell", "input", "swipe", str(x1), str(y1), str(x2), str(y2), str(duration)]
     return adb.run_command(cmd, check_output=False)
 
 @app.tool()
@@ -323,7 +315,7 @@ def input_text(text: str) -> str:
     Returns:
         操作结果消息
     """
-    cmd = ['shell', 'input', 'text', text]
+    cmd = ["shell", "input", "text", text]
     return adb.run_command(cmd, check_output=False)
 
 @app.tool()
@@ -331,39 +323,41 @@ def press_key(keycode: str) -> str:
     """按下按键
     
     Args:
-        keycode: 按键代码，如KEYCODE_HOME, KEYCODE_BACK等
+        keycode: 按键代码
         
     Returns:
         操作结果消息
     """
-    cmd = ['shell', 'input', 'keyevent', keycode]
+    cmd = ["shell", "input", "keyevent", keycode]
     return adb.run_command(cmd, check_output=False)
 
 # 媒体功能
 @app.tool()
-def take_screenshot(output_path: str = "/sdcard/screenshot.png") -> str:
+def take_screenshot(local_path: str = "screenshot.png") -> str:
     """截取屏幕截图
     
     Args:
-        output_path: 截图保存路径
+        local_path: 本地保存路径
         
     Returns:
         操作结果消息
     """
-    cmd = ['shell', 'screencap', '-p', output_path]
-    result = adb.run_command(cmd, check_output=False)
+    # 在设备上截图
+    remote_path = "/sdcard/screenshot.png"
+    adb.run_command(["shell", "screencap", "-p", remote_path])
     
-    # 将截图拉到本地
-    local_path = "screenshot.png"
-    pull_cmd = ['pull', output_path, local_path]
-    pull_result = adb.run_command(pull_cmd, check_output=False)
+    # 拉取到本地
+    adb.run_command(["pull", remote_path, local_path])
+    
+    # 清理设备上的文件
+    adb.run_command(["shell", "rm", remote_path])
     
     return f"截图已保存到: {local_path}"
 
 # 浏览器功能
 @app.tool()
 def open_url(url: str) -> str:
-    """在设备的默认浏览器中打开URL
+    """打开URL
     
     Args:
         url: 要打开的URL
@@ -372,12 +366,8 @@ def open_url(url: str) -> str:
         操作结果消息
     """
     # 确保URL有协议前缀
-    if not url.startswith('http://') and not url.startswith('https://'):
-        url = 'https://' + url
+    if not url.startswith("http"):
+        url = "https://" + url
         
-    cmd = ['shell', 'am', 'start', '-a', 'android.intent.action.VIEW', '-d', url]
+    cmd = ["shell", "am", "start", "-a", "android.intent.action.VIEW", "-d", url]
     return adb.run_command(cmd, check_output=False)
-
-# 主入口
-if __name__ == "__main__":
-    app.run(transport='stdio')

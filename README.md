@@ -7,9 +7,9 @@
 ### 📥 安装
 
 ```bash
-pip install phone-mcp
+pip install trae-phone-mcp
 # 或使用uvx
-uvx phone-mcp
+uvx trae-phone-mcp
 ```
 
 ### 🔧 配置
@@ -21,10 +21,10 @@ uvx phone-mcp
 ```json
 {
     "mcpServers": {
-        "phone-mcp": {
+        "trae-phone-mcp": {
             "command": "uvx",
             "args": [
-                "phone-mcp"
+                "trae-phone-mcp"
             ]
         }
     }
@@ -38,10 +38,10 @@ uvx phone-mcp
 ```json
 {
     "mcpServers": {
-        "phone-mcp": {
+        "trae-phone-mcp": {
             "command": "uvx",
             "args": [
-                "phone-mcp"
+                "trae-phone-mcp"
             ]
         }
     }
@@ -89,104 +89,104 @@ uvx phone-mcp
 
 ```bash
 # 检查设备连接
-phone-cli check
+trae-phone-cli check
 
 # 获取屏幕尺寸
-phone-cli screen-interact find method=clickable
+trae-phone-cli screen-interact find method=clickable
 ```
 
 ### 通信
 
 ```bash
 # 拨打电话
-phone-cli call 1234567890
+trae-phone-cli call 1234567890
 
 # 结束当前通话
-phone-cli hangup
+trae-phone-cli hangup
 
 # 发送短信
-phone-cli send-sms 1234567890 "你好"
+trae-phone-cli send-sms 1234567890 "你好"
 
 # 获取接收的消息（带分页）
-phone-cli messages --limit 10
+trae-phone-cli messages --limit 10
 
 # 获取发送的消息（带分页）
-phone-cli sent-messages --limit 10
+trae-phone-cli sent-messages --limit 10
 
 # 获取联系人（带分页）
-phone-cli contacts --limit 20
+trae-phone-cli contacts --limit 20
 
 # 通过UI自动化创建新联系人
-phone-cli create-contact "张三" "1234567890"
+trae-phone-cli create-contact "张三" "1234567890"
 ```
 
 ### 媒体和应用
 
 ```bash
 # 截图
-phone-cli screenshot
+trae-phone-cli screenshot
 
 # 录制屏幕
-phone-cli record --duration 30
+trae-phone-cli record --duration 30
 
 # 启动应用（可能不适用于所有设备）
-phone-cli app camera
+trae-phone-cli app camera
 
 # 关闭应用
-phone-cli close-app com.android.camera
+trae-phone-cli close-app com.android.camera
 
 # 列出已安装的应用（基本信息，更快）
-phone-cli list-apps
+trae-phone-cli list-apps
 
 # 分页列出应用
-phone-cli list-apps --page 1 --page-size 10
+trae-phone-cli list-apps --page 1 --page-size 10
 
 # 列出应用的详细信息（较慢）
-phone-cli list-apps --detailed
+trae-phone-cli list-apps --detailed
 
 # 启动特定活动（适用于所有设备的可靠方法）
-phone-cli launch com.android.settings/.Settings
+trae-phone-cli launch com.android.settings/.Settings
 
 # 在默认浏览器中打开URL
-phone-cli open-url baidu.com
+trae-phone-cli open-url baidu.com
 ```
 
 ### 屏幕分析和交互
 
 ```bash
 # 使用结构化信息分析当前屏幕
-phone-cli analyze-screen
+trae-phone-cli analyze-screen
 
 # 统一交互接口
-phone-cli screen-interact <action> [parameters]
+trae-phone-cli screen-interact <action> [parameters]
 
 # 在坐标处点击
-phone-cli screen-interact tap x=500 y=800
+trae-phone-cli screen-interact tap x=500 y=800
 
 # 通过文本点击元素
-phone-cli screen-interact tap element_text="登录"
+trae-phone-cli screen-interact tap element_text="登录"
 
 # 通过内容描述点击元素
-phone-cli screen-interact tap element_content_desc="日历"
+trae-phone-cli screen-interact tap element_content_desc="日历"
 
 # 滑动手势（向下滚动）
-phone-cli screen-interact swipe x1=500 y1=1000 x2=500 y2=200 duration=300
+trae-phone-cli screen-interact swipe x1=500 y1=1000 x2=500 y2=200 duration=300
 
 # 按键
-phone-cli screen-interact key keycode=back
+trae-phone-cli screen-interact key keycode=back
 
 # 输入文本
-phone-cli screen-interact text content="你好世界"
+trae-phone-cli screen-interact text content="你好世界"
 
 # 查找元素
-phone-cli screen-interact find method=text value="登录" partial=true
+trae-phone-cli screen-interact find method=text value="登录" partial=true
 
 # 等待元素
-phone-cli screen-interact wait method=text value="成功" timeout=10
+trae-phone-cli screen-interact wait method=text value="成功" timeout=10
 
 # 滚动查找元素
-phone-cli screen-interact scroll method=text value="设置" direction=down max_swipes=5
+trae-phone-cli screen-interact scroll method=text value="设置" direction=down max_swipes=5
 
 # 监控UI变化
-phone-cli monitor-ui --interval 0.5 --duration 30
+trae-phone-cli monitor-ui --interval 0.5 --duration 30
 ```
