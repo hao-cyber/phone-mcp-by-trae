@@ -1,192 +1,69 @@
-# 📱 Phone MCP Plugin
+# Phone MCP By Trae
 
-🌟 一个强大的MCP插件，让你通过ADB命令轻松控制Android手机。
+通过ADB命令控制Android手机的MCP插件
 
-## ⚡ 快速开始
+## 安装
 
-### 📥 安装
-
-```bash
-pip install trae-phone-mcp
-# 或使用uvx
-uvx trae-phone-mcp
-```
-
-### 🔧 配置
-
-#### Cursor设置
-
-在 `~/.cursor/mcp.json` 中配置：
-
-```json
-{
-    "mcpServers": {
-        "trae-phone-mcp": {
-            "command": "uvx",
-            "args": [
-                "trae-phone-mcp"
-            ]
-        }
-    }
-}
-```
-
-#### Claude设置
-
-在Claude配置中添加：
-
-```json
-{
-    "mcpServers": {
-        "trae-phone-mcp": {
-            "command": "uvx",
-            "args": [
-                "trae-phone-mcp"
-            ]
-        }
-    }
-}
-```
-
-### 使用方法：
-
-在Claude对话中直接使用命令，例如：
-```
-请给联系人小明打电话
-```
-
-⚠️ 使用前请确保：
-
-- ADB已正确安装和配置
-- Android设备已启用USB调试
-- 设备通过USB连接到电脑
-
-## 🎯 主要功能
-
-- 📞 **电话功能**：拨打电话、结束通话、接听来电
-- 💬 **短信**：发送和接收短信，获取原始消息
-- 👥 **联系人**：访问手机联系人，通过自动化UI交互创建新联系人
-- 📸 **媒体**：截图、屏幕录制、媒体控制
-- 📱 **应用**：启动应用程序，使用intent启动特定活动，列出已安装的应用，终止应用
-- 🔧 **系统**：窗口信息，应用快捷方式
-- 🗺️ **地图**：搜索带有电话号码的兴趣点
-- 🖱️ **UI交互**：点击、滑动、输入文本、按键
-- 🔍 **UI检查**：通过文本、ID、类或描述查找元素
-- 🤖 **UI自动化**：等待元素，滚动查找元素
-- 🧠 **屏幕分析**：结构化屏幕信息和统一交互
-- 🌐 **网页浏览器**：在设备的默认浏览器中打开URL
-- 🔄 **UI监控**：监控UI变化并等待特定元素出现或消失
-
-## 🛠️ 要求
-
-- Python 3.7+
-- 启用USB调试的Android设备
-- ADB工具
-
-## 📋 基本命令
-
-### 设备和连接
+### 从PyPI安装（推荐）
 
 ```bash
-# 检查设备连接
-trae-phone-cli check
-
-# 获取屏幕尺寸
-trae-phone-cli screen-interact find method=clickable
+# 从PyPI安装最新版本
+pip install phone-mcp-by-trae
 ```
 
-### 通信
+### 从源码安装
 
 ```bash
+# 从当前目录安装
+pip install -e .
+```
+
+## 使用方法
+
+### 作为MCP服务器运行
+
+```bash
+# 方法1：使用Python模块方式运行
+python -m phone_mcp_by_trae
+
+# 方法2：使用安装的命令行工具运行
+phone-mcp-by-trae
+```
+
+### 使用命令行工具
+
+```bash
+# 方法1：使用Python模块方式运行
+python -m phone_mcp_by_trae.phone_cli
+
+# 方法2：使用安装的命令行工具运行
+phone-cli-by-trae
+```
+
+## 命令行工具示例
+
+```bash
+# 检查已连接的设备
+phone-cli-by-trae check
+
+# 设置要使用的设备
+phone-cli-by-trae device <设备ID>
+
 # 拨打电话
-trae-phone-cli call 1234567890
-
-# 结束当前通话
-trae-phone-cli hangup
+phone-cli-by-trae call <电话号码>
 
 # 发送短信
-trae-phone-cli send-sms 1234567890 "你好"
+phone-cli-by-trae send-sms <电话号码> <短信内容>
 
-# 获取接收的消息（带分页）
-trae-phone-cli messages --limit 10
+# 打开应用
+phone-cli-by-trae app <应用包名>
 
-# 获取发送的消息（带分页）
-trae-phone-cli sent-messages --limit 10
-
-# 获取联系人（带分页）
-trae-phone-cli contacts --limit 20
-
-# 通过UI自动化创建新联系人
-trae-phone-cli create-contact "张三" "1234567890"
+# 点击屏幕
+phone-cli-by-trae tap <X坐标> <Y坐标>
 ```
 
-### 媒体和应用
+## 注意事项
 
-```bash
-# 截图
-trae-phone-cli screenshot
-
-# 录制屏幕
-trae-phone-cli record --duration 30
-
-# 启动应用（可能不适用于所有设备）
-trae-phone-cli app camera
-
-# 关闭应用
-trae-phone-cli close-app com.android.camera
-
-# 列出已安装的应用（基本信息，更快）
-trae-phone-cli list-apps
-
-# 分页列出应用
-trae-phone-cli list-apps --page 1 --page-size 10
-
-# 列出应用的详细信息（较慢）
-trae-phone-cli list-apps --detailed
-
-# 启动特定活动（适用于所有设备的可靠方法）
-trae-phone-cli launch com.android.settings/.Settings
-
-# 在默认浏览器中打开URL
-trae-phone-cli open-url baidu.com
-```
-
-### 屏幕分析和交互
-
-```bash
-# 使用结构化信息分析当前屏幕
-trae-phone-cli analyze-screen
-
-# 统一交互接口
-trae-phone-cli screen-interact <action> [parameters]
-
-# 在坐标处点击
-trae-phone-cli screen-interact tap x=500 y=800
-
-# 通过文本点击元素
-trae-phone-cli screen-interact tap element_text="登录"
-
-# 通过内容描述点击元素
-trae-phone-cli screen-interact tap element_content_desc="日历"
-
-# 滑动手势（向下滚动）
-trae-phone-cli screen-interact swipe x1=500 y1=1000 x2=500 y2=200 duration=300
-
-# 按键
-trae-phone-cli screen-interact key keycode=back
-
-# 输入文本
-trae-phone-cli screen-interact text content="你好世界"
-
-# 查找元素
-trae-phone-cli screen-interact find method=text value="登录" partial=true
-
-# 等待元素
-trae-phone-cli screen-interact wait method=text value="成功" timeout=10
-
-# 滚动查找元素
-trae-phone-cli screen-interact scroll method=text value="设置" direction=down max_swipes=5
-
-# 监控UI变化
-trae-phone-cli monitor-ui --interval 0.5 --duration 30
-```
+1. 确保已安装ADB工具并添加到系统PATH中
+2. 确保Android设备已启用USB调试模式并已授权连接的计算机
+3. 如果遇到权限问题，请尝试以管理员/root权限运行命令

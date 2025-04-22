@@ -1,10 +1,10 @@
 {
     "mcpServers": {
-        "trae-phone-mcp": {
+        "phone-mcp-by-trae": {
             "command": "python",
             "args": [
                 "-m",
-                "trae_phone_mcp"
+                "phone_mcp_by_trae"
             ],
             "env": {
                 "PYTHONPATH": "${workspaceFolder}"

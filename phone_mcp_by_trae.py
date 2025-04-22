@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Trae Phone MCP - Main entry point for the package when executed with python -m
+Trae Phone MCP - 主入口点文件
 """
 
 from trae_phone_mcp import main
