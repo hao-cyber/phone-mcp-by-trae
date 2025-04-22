@@ -1,10 +1,23 @@
 # Phone MCP By Trae
 
 通过ADB命令控制Android手机的MCP插件
+## 使用
+通过ADB命令控制Android手机的MCP插件
+#### trae使用方式 （推荐）
+{
+  "mcpServers": {
+    "phone-mcp-by-trae": {
+      "command": "uvx",
+      "args": [
+        "phone-mcp-by-trae"
+      ]
+    }
+  }
+}
 
 ## 安装
 
-### 从PyPI安装（推荐）
+### 从PyPI安装
 
 ```bash
 # 从PyPI安装最新版本
