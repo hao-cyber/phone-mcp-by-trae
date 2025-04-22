@@ -1,0 +1,14 @@
+{
+    "mcpServers": {
+        "phone-mcp": {
+            "command": "python",
+            "args": [
+                "-m",
+                "phone_mcp"
+            ],
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            }
+        }
+    }
+}
