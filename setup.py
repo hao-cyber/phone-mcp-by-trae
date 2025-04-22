@@ -31,4 +31,6 @@ setup(
             "trae-phone-cli=trae_phone_mcp:cli_main",
         ],
     },
+    license="MIT",
+    license_files=["LICENSE"],
 )
